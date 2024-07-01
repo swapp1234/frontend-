@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User List</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            text-align: left;
+            padding: 8px;
+            border-bottom: 1px solid #ddd;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 8px 16px;
+            margin: 5px 0;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        .edit-button {
+            background-color: #4CAF50;
+        }
+        .delete-button {
+            background-color: #f44336;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>User List</h2>
+
+    <form id="addUserForm">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+
+        <button type="submit">Add user</button>
+    </form>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="userList">
+            </tbody>
+    </table>
+
+    <script>
+        const userList = document.getElementById('userList');
+        const addUserForm = document.getElementById('addUserForm');
+
+        let users = []; // Initialize an empty array to store users
+
+        // Function to render the user list in the table
+        function renderUserList() {
+            userList.innerHTML = ''; // Clear the table body
+
+            for (let i = 0; i < users.length; i++) {
+                const user = users[i];
+
+                const row = userList.insertRow();
+                const idCell = row.insertCell();
+                const nameCell = row.insertCell();
+                const emailCell = row.insertCell();
+                const actionsCell = row.insertCell();
+
+                idCell.textContent = i + 1; // Display user ID
+                nameCell.textContent = user.name; // Display user name
+                emailCell.textContent = user.email; // Display user email
+
+                // Create Edit and Delete buttons
+                const editButton = document.createElement('button');
+                editButton.classList.add('edit-button');
+                editButton.textContent = 'Edit';
+                editButton.addEventListener('click', () => {
+                    // TODO: Implement edit functionality
+                    console.log('Edit button clicked for user:', user);
+                });
+
+                const deleteButton = document.createElement('button');
+                deleteButton.classList.add('delete-button');
+                deleteButton.textContent = 'Delete';
+                deleteButton.addEventListener('click', () => {
+                    // Remove the user from the array
+                    users.splice(i, 1);
+                    // Re-render the user list
+                    renderUserList();
+                });
+
+                actionsCell.appendChild(editButton);
+                actionsCell.appendChild(deleteButton);
+            }
+        }
+
+        // Add user form submission
+        addUserForm.addEventListener('submit', (event) => {
+            event.preventDefault(); // Prevent default form submission
+
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+
+            // Add the new user to the array
+            users.push({ name: name, email: email });
+
+            // Reset the form
+            addUserForm.reset();
+
+            // Re-render the user list
+            renderUserList();
+        });
+
+        // Initial rendering of the user list (empty initially)
+        renderUserList();
+    </script>
+
+</body>
+</html>
